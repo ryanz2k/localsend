@@ -1,0 +1,23 @@
+name: Android background receive
+
+on:
+  push:
+    branches: [feature/android-background-receive]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+          cache: true
+      - run: flutter pub get
+      - name: Background service regression tests
+        working-directory: packages/localsend_isolates
+        run: flutter test test/util/transfer_notification_test.dart
